@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        System.out.println("Testing Push from Reid");
+        //for permissions
+        //https://developer.android.com/training/permissions/requesting#java
     }
 }
