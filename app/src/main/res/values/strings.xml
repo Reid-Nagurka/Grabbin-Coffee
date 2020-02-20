@@ -5,4 +5,8 @@
     <string name="settings">Settings</string>
     <string name="see_past_rsvps">See Past RSVPs</string>
     <string name="new_event_invite">New Event Invite</string>
+    <string name="invitee_email">invitee email</string>
+    <string name="event_location">event location</string>
+    <string name="event_title">event title</string>
+    <string name="send_invite">Send Invite</string>
 </resources>
