@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.List;
 
 
@@ -49,6 +51,20 @@ public class NewEvent extends AppCompatActivity {
                 final String eventLocationText = eventLocationField.getText().toString();
                 final List<MaterialDayPicker.Weekday> chosenDays = materialDayPicker.getSelectedDays(); // perhaps we should change this to be a string..
 //                Log.d("Days chosen: ", materialDayPicker.getSelectedDays().toString()); // this works!
+
+                //  check that all fields are filled out
+                //  if not, prompt the user to fill everyting out
+                if (eventNameText.isEmpty() || eventEmailText.isEmpty() || eventLocationText.isEmpty() || chosenDays.isEmpty()) {
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(android.R.id.content).getRootView(), "Please fille out all fields!", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+
+                else {
+                    //  send the request
+                    System.out.println("Send Request");
+                }
+
             }
         });
 
