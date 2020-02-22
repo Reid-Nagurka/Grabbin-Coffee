@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/newEventButton"
         android:layout_width="268dp"
         android:layout_height="45dp"
         android:layout_marginTop="35dp"
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/seeHistoryButton"
         android:layout_width="268dp"
         android:layout_height="45dp"
         android:layout_marginTop="20dp"
@@ -51,10 +51,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.559"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/newEventButton" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/settingsButton"
         android:layout_width="268dp"
         android:layout_height="45dp"
         android:layout_marginTop="20dp"
@@ -63,6 +63,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.559"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintTop_toBottomOf="@+id/seeHistoryButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
