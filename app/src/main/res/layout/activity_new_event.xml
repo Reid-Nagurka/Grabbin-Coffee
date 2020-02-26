@@ -72,6 +72,7 @@
         android:layout_marginBottom="20dp"
         android:background="@android:color/white"
         android:text="@string/send_invite"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/eventLocationField"
         app:layout_constraintStart_toStartOf="@+id/eventLocationField" />
