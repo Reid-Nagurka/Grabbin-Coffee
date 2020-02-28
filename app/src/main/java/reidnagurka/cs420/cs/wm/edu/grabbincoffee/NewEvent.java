@@ -12,9 +12,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /*
@@ -92,7 +101,7 @@ public class NewEvent extends AppCompatActivity {
         });
 
 
-        //configureSendInviteButton();
+        configureSendInviteButton();
     }
 
     /* Run everytime data is submitted*/
@@ -168,10 +177,49 @@ public class NewEvent extends AppCompatActivity {
                 else {
                     //  send the request
                     System.out.println("Send Request");
+                    sendPostRequest();
                 }
 
             }
         });
 
+    }
+
+    private void sendPostRequest(){
+        final EditText eventEmailField = findViewById(R.id.inviteEmailField);
+        final Button sendInviteButton = findViewById(R.id.sendInviteButton);
+        RequestQueue queue = Volley.newRequestQueue(NewEvent.this);
+        String url = "https://grabbin-coffee-api.now.sh/api/invite"; // TODO: ENSURE THIS IS STILL ACCURATE
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                sendInviteButton.setText("Invitation Sent!");
+                sendInviteButton.setEnabled(false);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                sendInviteButton.setText("Invitation send error :(");
+                sendInviteButton.setEnabled(false);
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams(){
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("email", eventEmailField.getText().toString());
+                params.put("birthday", "jan 12");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+
+            }
+        };
+        queue.add(stringRequest);
     }
 }

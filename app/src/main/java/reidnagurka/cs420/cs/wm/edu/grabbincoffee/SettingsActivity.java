@@ -33,51 +33,52 @@ public class SettingsActivity extends AppCompatActivity {
 
 
 
-//        configurePostUpButtion();
+        configurePostUpButtion();
     }
 
-//    private void configurePostUpButtion(){
-//        Button postUpButton = findViewById(R.id.postUp);
-//
-//        postUpButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                sendPostRequest();
-//            }
-//        });
-//    }
-//
-//    private void sendPostRequest(){
-//        final TextView postTextResponse = findViewById(R.id.postUpTextResponse); // pls delete, just for learning
-//        RequestQueue queue = Volley.newRequestQueue(SettingsActivity.this);
-//        String url = "https://12c213d3.ngrok.io/api/invite";
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                postTextResponse.setText("POST RESPONSE: "+response);
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                postTextResponse.setText("POST ERROR"+error);
-//
-//            }
-//        }){
-//            @Override
-//            protected Map<String, String> getParams(){
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("email","greg.garnhart12@gmail.com");
-//                return params;
-//            }
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError{
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("Content-Type", "application/x-www-form-urlencoded");
-//                return params;
-//
-//            }
-//        };
-//        queue.add(stringRequest);
-//    }
+    private void configurePostUpButtion(){
+        Button postUpButton = findViewById(R.id.postUp);
+
+        postUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendPostRequest();
+            }
+        });
+    }
+
+    private void sendPostRequest(){
+        final TextView postTextResponse = findViewById(R.id.postUpTextResponse); // pls delete, just for learning
+        RequestQueue queue = Volley.newRequestQueue(SettingsActivity.this);
+        String url = "https://12c213d3.ngrok.io/api/invite";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                postTextResponse.setText("POST RESPONSEs: "+response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                postTextResponse.setText("POST ERROR"+error);
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams(){
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("email","rnagurka@email.wm.edu");
+                params.put("birthday", "jan 12");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError{
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+
+            }
+        };
+        queue.add(stringRequest);
+    }
 }

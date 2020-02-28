@@ -3,6 +3,7 @@
     package="reidnagurka.cs420.cs.wm.edu.grabbincoffee">
 
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
