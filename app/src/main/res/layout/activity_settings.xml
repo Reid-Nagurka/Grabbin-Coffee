@@ -37,4 +37,26 @@
         android:text="@string/toggle_dark_mode"
         app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/unlinkCalendarButton" />
+
+    <Button
+        android:id="@+id/postUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/postup"
+        app:layout_constraintEnd_toEndOf="@+id/darkModeButton"
+        app:layout_constraintStart_toStartOf="@+id/darkModeButton"
+        app:layout_constraintTop_toBottomOf="@+id/darkModeButton" />
+
+    <TextView
+        android:id="@+id/postUpTextResponse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/post_me"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postUp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

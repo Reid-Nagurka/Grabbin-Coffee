@@ -12,4 +12,6 @@
     <string name="unlink_calendar">Unlink Calendar</string>
     <string name="toggle_dark_mode">toggle dark mode</string>
     <string name="past_rsvps">Past RSVPs</string>
+    <string name="postup">postUp</string>
+    <string name="post_me">post me</string>
 </resources>
