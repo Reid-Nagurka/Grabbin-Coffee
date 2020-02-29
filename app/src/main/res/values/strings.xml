@@ -16,4 +16,7 @@
     <string name="post_me">post me</string>
     <string name="title_activity_maps">Map</string>
     <string name="maps_button_name">Loc</string>
+    <string name="find_dates">find dates</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
 </resources>
