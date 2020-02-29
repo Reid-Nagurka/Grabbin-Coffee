@@ -2,9 +2,14 @@ package reidnagurka.cs420.cs.wm.edu.grabbincoffee;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -26,6 +31,23 @@ import java.util.Map;
  */
 public class SettingsActivity extends AppCompatActivity {
 
+    // ANDROID STUDIO STUFF
+    // Projection array. Creating indices for this array instead of doing
+    // dynamic lookups improves performance.
+    public static final String[] EVENT_PROJECTION = new String[] {
+            CalendarContract.Calendars._ID,                           // 0
+            CalendarContract.Calendars.ACCOUNT_NAME,                  // 1
+            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,         // 2
+            CalendarContract.Calendars.OWNER_ACCOUNT                  // 3
+
+    };
+
+    // The indices for the projection array above.
+    private static final int PROJECTION_ID_INDEX = 0;
+    private static final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
+    private static final int PROJECTION_DISPLAY_NAME_INDEX = 2;
+    private static final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,47 +60,52 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void configurePostUpButtion(){
         Button postUpButton = findViewById(R.id.postUp);
+        final CheckBox monday = findViewById(R.id.checkBoxMonday);
+        final CheckBox tuesday = findViewById(R.id.checkBoxTuesday);
 
         postUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendPostRequest();
+//                if(monday.isChecked()){
+//
+//                }
+                runCalendarQuery();
             }
         });
     }
 
-    private void sendPostRequest(){
-        final TextView postTextResponse = findViewById(R.id.postUpTextResponse); // pls delete, just for learning
-        RequestQueue queue = Volley.newRequestQueue(SettingsActivity.this);
-        String url = "https://12c213d3.ngrok.io/api/invite";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                postTextResponse.setText("POST RESPONSEs: "+response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                postTextResponse.setText("POST ERROR"+error);
+    private void runCalendarQuery(){
+        // Run query
+        Cursor cur = null;
+        ContentResolver cr = getContentResolver();
+        Uri uri = CalendarContract.Calendars.CONTENT_URI;
+        String selection = "((" + CalendarContract.Calendars.ACCOUNT_NAME + " = ?) AND ("
+                + CalendarContract.Calendars.ACCOUNT_TYPE + " = ?) AND ("
+                + CalendarContract.Calendars.OWNER_ACCOUNT + " = ?))";
+        String[] selectionArgs = new String[] {"hera@example.com", "com.example",
+                "hera@example.com"};
+        // Submit the query and get a Cursor object back.
+        cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
 
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams(){
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("email","rnagurka@email.wm.edu");
-                params.put("birthday", "jan 12");
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError{
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                return params;
-
-            }
-        };
-        queue.add(stringRequest);
+        loopThroughEvents(cur);
     }
+
+    private void loopThroughEvents(Cursor cur){
+        // Use the cursor to step through the returned records
+        while (cur.moveToNext()) {
+            long calID = 0;
+            String displayName = null;
+            String accountName = null;
+            String ownerName = null;
+
+            // Get the field values
+            calID = cur.getLong(PROJECTION_ID_INDEX);
+            displayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
+            accountName = cur.getString(PROJECTION_ACCOUNT_NAME_INDEX);
+            ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
+
+            // Do something with the values...
+        }
+    }
+
 }

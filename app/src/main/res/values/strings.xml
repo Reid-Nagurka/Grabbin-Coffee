@@ -14,4 +14,7 @@
     <string name="past_rsvps">Past RSVPs</string>
     <string name="postup">postUp</string>
     <string name="post_me">post me</string>
+    <string name="find_dates">find dates</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
 </resources>
