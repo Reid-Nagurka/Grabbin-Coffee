@@ -3,6 +3,7 @@ package reidnagurka.cs420.cs.wm.edu.grabbincoffee;
 import androidx.appcompat.app.AppCompatActivity;
 import ca.antonious.materialdaypicker.MaterialDayPicker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -221,5 +222,11 @@ public class NewEvent extends AppCompatActivity {
             }
         };
         queue.add(stringRequest);
+    }
+
+    /* Open up webview to Google Maps, let user pick a location, copy location and paste into text field*/
+    public void locationHandler(View view) {
+        System.out.println("location handler clicked");
+        startActivity(new Intent(NewEvent.this, MapsActivity.class));
     }
 }

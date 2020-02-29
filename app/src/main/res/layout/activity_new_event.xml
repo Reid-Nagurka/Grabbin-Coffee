@@ -77,4 +77,13 @@
         app:layout_constraintEnd_toEndOf="@+id/eventLocationField"
         app:layout_constraintStart_toStartOf="@+id/eventLocationField" />
 
+    <Button
+        android:id="@+id/maps_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/maps_button_name"
+        app:layout_constraintBottom_toBottomOf="@id/eventLocationField"
+        app:layout_constraintRight_toRightOf="@id/eventLocationField"
+        android:onClick="locationHandler"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
