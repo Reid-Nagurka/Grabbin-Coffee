@@ -1,9 +1,13 @@
 package reidnagurka.cs420.cs.wm.edu.grabbincoffee;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import ca.antonious.materialdaypicker.MaterialDayPicker;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -227,6 +231,54 @@ public class NewEvent extends AppCompatActivity {
     /* Open up webview to Google Maps, let user pick a location, copy location and paste into text field*/
     public void locationHandler(View view) {
         System.out.println("location handler clicked");
-        startActivity(new Intent(NewEvent.this, MapsActivity.class));
+        //check if location permission is granted, request if not
+
+        if (ContextCompat.checkSelfPermission(NewEvent.this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            System.out.println("Permission Not Granted");
+
+            //need to get Permissions
+            //100 is a temporary request code, should be a CONST
+            ActivityCompat.requestPermissions(NewEvent.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    200);
+        }
+        //permission is granted
+        else {
+            System.out.print("Permission was already granted, going to new screen from else statement");
+            startActivity(new Intent(NewEvent.this, MapsActivity.class));
+        }
+
+
+
+        /* In MapsActivity, open up to user's location.*/
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        //more cases for more permissions, for right now 100 is just a placeholder, should be switched to CONST
+        switch (requestCode) {
+            case 200: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    System.out.println("Permission was granted, going to new screen from override");
+                    startActivity(new Intent(NewEvent.this, MapsActivity.class));
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    System.out.println("User denied permission");
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
     }
 }
