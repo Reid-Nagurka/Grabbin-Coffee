@@ -1,7 +1,7 @@
 package reidnagurka.cs420.cs.wm.edu.grabbincoffee;
 
 import androidx.appcompat.app.AppCompatActivity;
-import ca.antonious.materialdaypicker.MaterialDayPicker;
+//import ca.antonious.materialdaypicker.MaterialDayPicker;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.snackbar.Snackbar;
+//import com.google.android.material.snackbar.Snackbar;
 
 import java.util.HashMap;
 import java.util.List;
@@ -115,12 +115,12 @@ public class NewEvent extends AppCompatActivity {
         final EditText eventEmailField = findViewById(R.id.inviteEmailField);
         final EditText eventLocationField = findViewById(R.id.eventLocationField);
 
-        final MaterialDayPicker materialDayPicker = findViewById(R.id.day_picker);
+//        final MaterialDayPicker materialDayPicker = findViewById(R.id.day_picker);
 
         final String eventNameText = eventNameField.getText().toString();
         final String eventEmailText = eventEmailField.getText().toString();
         final String eventLocationText = eventLocationField.getText().toString();
-        final List<MaterialDayPicker.Weekday> chosenDays = materialDayPicker.getSelectedDays(); // perhaps we should change this to be a string..
+//        final List<MaterialDayPicker.Weekday> chosenDays = materialDayPicker.getSelectedDays(); // perhaps we should change this to be a string..
 
 
         //check that no field is empty
@@ -151,7 +151,7 @@ public class NewEvent extends AppCompatActivity {
         final EditText eventEmailField = findViewById(R.id.inviteEmailField);
         final EditText eventLocationField = findViewById(R.id.eventLocationField);
 
-        final MaterialDayPicker materialDayPicker = findViewById(R.id.day_picker);
+//        final MaterialDayPicker materialDayPicker = findViewById(R.id.day_picker);
 
 
 
@@ -162,17 +162,18 @@ public class NewEvent extends AppCompatActivity {
                 final String eventNameText = eventNameField.getText().toString();
                 final String eventEmailText = eventEmailField.getText().toString();
                 final String eventLocationText = eventLocationField.getText().toString();
-                final List<MaterialDayPicker.Weekday> chosenDays = materialDayPicker.getSelectedDays(); // perhaps we should change this to be a string..
+//                final List<MaterialDayPicker.Weekday> chosenDays = materialDayPicker.getSelectedDays(); // perhaps we should change this to be a string..
 //                Log.d("Days chosen: ", materialDayPicker.getSelectedDays().toString()); // this works!
 
                 System.out.println("send request");
 
                 //  check that all fields are filled out
                 //  if not, prompt the user to fill everyting out
-                if (eventNameText.isEmpty() || eventEmailText.isEmpty() || eventLocationText.isEmpty() || chosenDays.isEmpty()) {
-                    Snackbar snackbar = Snackbar
-                            .make(findViewById(android.R.id.content).getRootView(), "Please fill out all fields!", Snackbar.LENGTH_LONG);
-                    snackbar.show();
+                // this version is missing ChosenDays, just a psa
+                if (eventNameText.isEmpty() || eventEmailText.isEmpty() || eventLocationText.isEmpty()) {
+//                    Snackbar snackbar = Snackbar
+//                            .make(findViewById(android.R.id.content).getRootView(), "Please fill out all fields!", Snackbar.LENGTH_LONG);
+//                    snackbar.show();
                 }
 
                 else {
