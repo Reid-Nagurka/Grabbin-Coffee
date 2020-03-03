@@ -82,9 +82,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Log.d("Location: ", location.toString());
                             if (location != null) {
                                 // Logic to handle location object
+                                //        LatLng sydney = new LatLng(-34, 151);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+                                LatLng curLoc = new LatLng(location.getLatitude(), location.getLongitude());
+                                mMap.addMarker(new MarkerOptions().position(curLoc).title("Current Location"));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLng(curLoc));
+
                             }
                         }
                     });
+
+
 
 
 
