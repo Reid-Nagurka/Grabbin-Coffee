@@ -236,9 +236,11 @@ public class NewEvent extends AppCompatActivity {
      */
     private void sendPostRequest(final CoffeeEvent[] proposals){
         final EditText eventEmailField = findViewById(R.id.inviteEmailField);
+        final EditText eventTitleField = findViewById(R.id.eventTitleField);
         final Button sendInviteButton = findViewById(R.id.sendInviteButton);
         RequestQueue queue = Volley.newRequestQueue(NewEvent.this);
-        String url = "https://grabbin-coffee-api.now.sh/api/invite"; // TODO: ENSURE THIS IS STILL ACCURATE
+//        String url = "https://grabbin-coffee-api.now.sh/api/invite"; // TODO: ENSURE THIS IS STILL ACCURATE
+        String url = "http://73ac6de2.ngrok.io/api/invite";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -270,9 +272,9 @@ public class NewEvent extends AppCompatActivity {
 
                 // add proposals to params object!
                 for(int i = 0; i < size; i++){
-                    String dateKey = "date_"+ i;
-                    String timeKey = "time_"+ i;
-                    String urlKey = "event_link_"+ i;
+                    String dateKey = "date_"+ (i+1);
+                    String timeKey = "time_"+ (i+1);
+                    String urlKey = "event_link_"+ (i+1);
                     String dateString = proposals[i].getStartDateOnly();
                     String timeString = proposals[i].getStartTimeOnly();
 
@@ -284,7 +286,12 @@ public class NewEvent extends AppCompatActivity {
                     params.put(timeKey, timeString);
                     params.put(urlKey, url);
                 }
+                params.put("sender_email", "gegarnhart@email.wm.edu");
+                params.put("sender_name", "Greg");
                 params.put("decline_link",mailLinkCreator.getDeclineLink());
+                params.put("subject", "You are being invited to get coffee!");
+                params.put("event_title", eventTitleField.getText().toString());
+                params.put("name", "CollectRecipientName");
                 return params;
             }
 
