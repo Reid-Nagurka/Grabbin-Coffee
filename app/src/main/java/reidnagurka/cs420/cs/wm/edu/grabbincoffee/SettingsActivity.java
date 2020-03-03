@@ -5,33 +5,25 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.TextView;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -91,19 +83,28 @@ public class SettingsActivity extends AppCompatActivity {
         final CheckBox monday = findViewById(R.id.checkBoxMonday);
         final CheckBox tuesday = findViewById(R.id.checkBoxTuesday);
 
+
+
         postUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if(monday.isChecked()){
-//
-//                }
-                Log.v("BUTTON ACTION", "Looking for calendar invites");
-                runCalendarQuery();
+                // A HashMap of our selected weekdays.
+                // Important to note that the capitilization is important!
+                // It is compared to a string returned from a calendar function
+                final HashMap<String, Boolean> selectedWeekdays = new HashMap<String, Boolean>();
+                selectedWeekdays.put("Monday", monday.isChecked());
+                selectedWeekdays.put("Tuesday", tuesday.isChecked());
+                selectedWeekdays.put("Wednesday", tuesday.isChecked());
+                selectedWeekdays.put("Thursday", tuesday.isChecked());
+                selectedWeekdays.put("Friday", tuesday.isChecked());
+                selectedWeekdays.put("Saturday", tuesday.isChecked());
+                selectedWeekdays.put("Sunday", tuesday.isChecked());
+                CoffeeEvent[] proposedEvents = runCalendarQuery(selectedWeekdays);
             }
         });
     }
 
-    private void runCalendarQuery(){
+    private CoffeeEvent[] runCalendarQuery(HashMap<String,Boolean> selectedWeekdays){
 
         if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.READ_CALENDAR)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -146,14 +147,38 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         // Hey! We got this week's events
-        HashMap<Long, Long> weeklyEvents = getThisWeeksEvents(cur);
+        HashMap<Long, Long> conflictingWeeklyEvents = getThisWeeksEvents(cur, selectedWeekdays);
+
+        // create a list of possible events!
+        HashMap proposals = getCoffeeProposals(conflictingWeeklyEvents, selectedWeekdays);
+        CoffeeEvent [] coffeeEvents = getCoffeeEvents(proposals);
+        Arrays.sort(coffeeEvents);
+        return coffeeEvents;
+
     }
 
-    private HashMap getThisWeeksEvents(Cursor cur){
+    /**
+     * Loops through a calendar of events for the coming week based on the current time.
+     * (e.g. if today is Tuesday, then it will go from Tuesday - Monday)
+     *
+     * @param cur is the cursor that points to a table of events from a calendar.
+     * @return a HashMap of conflicting events for the Selected Days of the Week
+     */
+    private HashMap getThisWeeksEvents(Cursor cur, HashMap<String, Boolean> selectedWeekdays){
         // Use the cursor to step through the returned records
-        Date today = new Date();
-        Long start_week = today.getTime();
-        Long end_week = start_week + 604800000L;
+
+        // Initialize a calendar date object for TODAY's midnight time (today at 12:00:00:0000 AM)
+        Calendar today = new GregorianCalendar();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
+        Long start_week = today.getTimeInMillis();
+
+        // Now, set the end week variable to today + a week
+        today.add(Calendar.DAY_OF_WEEK,7);
+        Long end_week = today.getTimeInMillis();
+
         HashMap<Long, Long> weeklyEvents = new HashMap<Long,Long>();
 
         while (cur.moveToNext()) {
@@ -170,6 +195,11 @@ public class SettingsActivity extends AppCompatActivity {
 
             Long event_start = Long.parseLong(start);
             Long event_end = 0L;
+
+
+
+
+
             Boolean ignore = false;
             if(end != null){
                 event_end = Long.parseLong(end);
@@ -186,8 +216,17 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
 
-            if(event_start > start_week && event_end < end_week){
-                weeklyEvents.put(event_start, event_end);
+            String startDayOfWeek = getWeekdayName(event_start);
+            String endDayOfWeek = getWeekdayName(event_end);
+
+
+            boolean fallsOnSelectedDay = (selectedWeekdays.get(startDayOfWeek) || selectedWeekdays.get(endDayOfWeek));
+
+            if((event_start > start_week && event_end < end_week)){
+
+                if(fallsOnSelectedDay){
+                    weeklyEvents.put(event_start, event_end);
+                }
             }
 
 
@@ -202,5 +241,129 @@ public class SettingsActivity extends AppCompatActivity {
 
         return weeklyEvents;
     }
+
+    /**
+     * Returns a list of date proposals.
+     * Note: These date will be prioritized by doing 1 on each selected day at 9 AM, then 1 on each day at 10 AM, etc.
+     * If there is a conflict at 9 am for one selected weekday, the algorithm will move on to the next day.
+     * @param conflictingWeeklyEvents is a HashMap of startTimes and endTimes for conflicting events. If events are in this HashMap, do not schedule on top of them
+     * @param selectedWeekdays is a HashMap of "Week days" and Booleans for the entire 7 day week.
+     */
+    private HashMap getCoffeeProposals(HashMap conflictingWeeklyEvents, HashMap selectedWeekdays){
+
+        // initialize return HashMap
+        HashMap<Long, Long> proposals = new HashMap<Long, Long>();
+
+        // initialize a week's span in which to suggest dates.
+        Calendar today = new GregorianCalendar();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
+        Calendar agendaRover = new GregorianCalendar();
+        agendaRover.set(Calendar.HOUR, 0);
+        agendaRover.set(Calendar.MINUTE, 0);
+        agendaRover.set(Calendar.SECOND, 0);
+        agendaRover.set(Calendar.MILLISECOND, 0); // likely redundant
+
+
+        int hourOfDay = 9; // start at 9, then loop up until 5 PM
+        int optionsProvided = 0; // cut it at 5.
+        // Now, using the selected weekdays method, loop through the days needed to set the proper today function.
+        // We are gonna brute force it a bit, so we'll need to do a loop
+
+        // double loop that will run a maximum of 105 times.
+        // i highly doubt it will ever run that long.
+        while(hourOfDay<24 && optionsProvided < 6){
+            Iterator weekdayIterator = selectedWeekdays.entrySet().iterator();
+            agendaRover.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            while(weekdayIterator.hasNext() && optionsProvided < 5){
+                Map.Entry mapEntry = (Map.Entry) weekdayIterator.next();
+
+
+                // this date was a selected preference!
+                if((Boolean) mapEntry.getValue()){
+                    // mapEntry will tell us what day of the week it is, but we need to set our calendar object to that day!
+                    if(!getWeekdayName(agendaRover.getTimeInMillis()).equals(mapEntry.getKey())){
+                        // the current weekday we are searching for is ahead of our timestamp (e.g. our timestamp is on Monday, but our weekday search query is Tuesday)
+                        while(!getWeekdayName(agendaRover.getTimeInMillis()).equals(mapEntry.getKey())){
+                            agendaRover.add(Calendar.DAY_OF_WEEK, 1);
+                        }
+
+
+                    }
+
+
+                    Long endTime = agendaRover.getTimeInMillis() + TimeUnit.HOURS.toMillis(1); // add an hour to the start time
+                    if(!doesConflict(conflictingWeeklyEvents,agendaRover.getTimeInMillis(), endTime)){
+                        // make a proposal!
+                        proposals.put(agendaRover.getTimeInMillis(), endTime);
+                        optionsProvided++;
+                    }
+                }
+            }
+            // set back to midnight
+            agendaRover.set(Calendar.HOUR_OF_DAY, 0);
+            hourOfDay++;
+        }
+        return proposals;
+    }
+
+    /**
+     * @param conflictingEvents: hashmap of events that could conflict with the proposed time
+     * @param proposedStartTime: Timestamp of proposed event startTime
+     * @param proposedEndTime: Timestamp 1 hour after startTime
+     * @return a boolean that says whether or not there is a conflict.
+     */
+    public Boolean doesConflict(HashMap conflictingEvents, Long proposedStartTime, Long proposedEndTime){
+        // initialize return value
+        boolean answer = false;
+
+        Iterator conflictingIterator = conflictingEvents.entrySet().iterator();
+        while (conflictingIterator.hasNext() && !answer){
+            Map.Entry mapEntry = (Map.Entry) conflictingIterator.next();
+            Long conflictStartTime = (Long) mapEntry.getKey();
+            Long conflictEndTime = (Long) mapEntry.getValue();
+            String conflictDay = getWeekdayName(conflictStartTime);
+
+            // order: first condition checks that the conflict is later
+            //        second condition checks that the conflict is earlier
+            answer = !(conflictStartTime > proposedStartTime && conflictEndTime > proposedStartTime || conflictStartTime < proposedStartTime && conflictEndTime < proposedStartTime || conflictEndTime > proposedEndTime && conflictStartTime > proposedEndTime || conflictEndTime < proposedEndTime);
+        }
+
+        return answer;
+    }
+
+    /**
+     * Used to find the day of the week based on a time stamp. Returns something like "Monday" (Definitely capitalized)
+     * @param startTime is a timestamp in Long format
+     * @return the day of the week in String Format to comply with our HashMap
+     */
+    private String getWeekdayName(Long startTime){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
+
+        return simpleDateFormat.format(startTime);
+    }
+
+    /**
+     *
+     * @param map a list of proposed events
+     * @return an array of coffee objects that can be called to do various things (like get a time string!)
+     */
+    public CoffeeEvent[] getCoffeeEvents(HashMap map){
+        CoffeeEvent[] answer = new CoffeeEvent[map.size()];
+        Iterator iterator = map.entrySet().iterator();
+
+        int i = 0;
+        while(iterator.hasNext()){
+            Map.Entry mapEntry = (Map.Entry) iterator.next();
+            CoffeeEvent cur = new CoffeeEvent((Long) mapEntry.getKey(), (Long) mapEntry.getValue());
+            answer[i] = cur;
+            i++;
+        }
+
+        return answer;
+    }
+
 
 }
