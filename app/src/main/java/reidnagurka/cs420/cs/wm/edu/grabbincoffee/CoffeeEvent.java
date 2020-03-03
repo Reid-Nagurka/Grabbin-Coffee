@@ -1,9 +1,7 @@
 package reidnagurka.cs420.cs.wm.edu.grabbincoffee;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * A Coffee Event is an Class constructed with two timestamps.
@@ -23,14 +21,24 @@ public class CoffeeEvent implements Comparable{
      * @param timeStamp the timestamp in which this is built
      * @return example like: "Monday, March 2, 2020 at 4 PM"
      */
-    public String getFullDateString(Long timeStamp){
-        SimpleDateFormat weekDayFormat = new SimpleDateFormat("EEEE");
-        SimpleDateFormat dateTime = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
+    private String getFullDateString(Long timeStamp){
+        SimpleDateFormat weekDayFormat = new SimpleDateFormat("EEEE", Locale.US);
+        SimpleDateFormat dateTime = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a", Locale.US);
 
         String dayOfWeek = weekDayFormat.format(timeStamp);
         String dateTimeString = dateTime.format(timeStamp);
 
         return dayOfWeek + " " + dateTimeString;
+    }
+
+    private String getOnlyDateString(Long timestamp){
+        SimpleDateFormat dateTime = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+        return dateTime.format(timestamp);
+    }
+
+    private String getOnlyTimeString(Long timestamp){
+        SimpleDateFormat timeString = new SimpleDateFormat("h:mm:ss a", Locale.US);
+        return timeString.format(timestamp);
     }
 
     public String getStartTimeString(){
@@ -39,6 +47,22 @@ public class CoffeeEvent implements Comparable{
 
     public String getEndTimeString(){
         return getFullDateString(this.endTime);
+    }
+
+    public String getStartDateOnly(){
+        return getOnlyDateString(this.startTime);
+    }
+
+    public String getEndDateOnly(){
+        return getOnlyDateString(this.endTime);
+    }
+
+    public String getStartTimeOnly(){
+        return getOnlyTimeString(this.startTime);
+    }
+
+    public String getEndTimeOnly(){
+        return getOnlyTimeString(this.endTime);
     }
 
     @Override

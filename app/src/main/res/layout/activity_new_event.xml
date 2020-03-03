@@ -76,4 +76,73 @@
         app:layout_constraintRight_toRightOf="@id/eventLocationField"
         android:onClick="locationHandler"/>
 
+    <CheckBox
+        android:id="@+id/mondayCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/mon"
+        app:layout_constraintEnd_toStartOf="@+id/tuesdayCheckBox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventLocationField" />
+
+    <CheckBox
+        android:id="@+id/tuesdayCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/tues"
+        app:layout_constraintEnd_toStartOf="@+id/wednesdayCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/eventLocationField" />
+
+    <CheckBox
+        android:id="@+id/wednesdayCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="@string/wed"
+        app:layout_constraintEnd_toStartOf="@+id/thursdayCheckBox"
+        app:layout_constraintTop_toTopOf="@+id/tuesdayCheckBox" />
+
+    <CheckBox
+        android:id="@+id/thursdayCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:text="@string/thurs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/wednesdayCheckBox" />
+
+    <CheckBox
+        android:id="@+id/fridayCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/fri"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mondayCheckBox" />
+
+    <CheckBox
+        android:id="@+id/saturdayCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/sat"
+        app:layout_constraintStart_toEndOf="@+id/fridayCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/tuesdayCheckBox" />
+
+    <CheckBox
+        android:id="@+id/sundayCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:text="@string/sun"
+        app:layout_constraintStart_toEndOf="@+id/saturdayCheckBox"
+        app:layout_constraintTop_toTopOf="@+id/saturdayCheckBox" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
