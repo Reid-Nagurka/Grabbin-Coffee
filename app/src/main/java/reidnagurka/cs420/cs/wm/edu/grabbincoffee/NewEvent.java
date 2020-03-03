@@ -326,6 +326,22 @@ public class NewEvent extends AppCompatActivity {
                     FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
                     Task locationResult = mFusedLocationProviderClient.getLastLocation();
                     System.out.println(locationResult);
+                    LocationRequest locationRequest = LocationRequest.create();
+                    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                    LocationCallback locationCallback = new LocationCallback() {
+                        @Override
+                        public void onLocationResult(LocationResult locRes) {
+                            if (locRes == null) {
+                                //Log.d("Loc", "Location is null in if");
+                                System.out.println("Location is null in if");
+                                return;
+                            } else {
+                                //Log.d("Loc", "Location is not null in else");
+                                System.out.println("Location is not null in else");
+                                //loc_found_check = true;
+                            }
+                        }
+                    };
                     mFusedLocationProviderClient.getLastLocation()
                             .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                                 @Override
