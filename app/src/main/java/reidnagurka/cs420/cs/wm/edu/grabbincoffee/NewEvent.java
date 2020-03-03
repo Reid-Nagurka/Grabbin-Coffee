@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 //import ca.antonious.materialdaypicker.MaterialDayPicker;
 
 import android.content.Intent;
+import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +22,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 //import com.google.android.material.snackbar.Snackbar;
 
 import java.util.HashMap;
@@ -228,6 +234,34 @@ public class NewEvent extends AppCompatActivity {
     /* Open up webview to Google Maps, let user pick a location, copy location and paste into text field*/
     public void locationHandler(View view) {
         System.out.println("location handler clicked");
-        startActivity(new Intent(NewEvent.this, MapsActivity.class));
+        //startActivity(new Intent(NewEvent.this, MapsActivity.class));
+        FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        Task locationResult = mFusedLocationProviderClient.getLastLocation();
+        System.out.println(locationResult);
+        mFusedLocationProviderClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        Log.d("Location: ", location.toString());
+                        if (location != null) {
+                            String latitude = Double.toString(location.getLatitude());
+                            String longititude = Double.toString(location.getLongitude());
+
+                            String uri_parse_string = "geo:" + latitude + "," + longititude + "?q=coffee";
+                            Log.d("uri", uri_parse_string);
+                            Uri gmmIntentUri = Uri.parse(uri_parse_string);
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                                startActivity(mapIntent);
+                            }
+
+                        }
+                    }
+                });
+
+
+
     }
 }
