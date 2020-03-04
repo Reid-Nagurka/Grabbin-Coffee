@@ -237,10 +237,12 @@ public class NewEvent extends AppCompatActivity {
     private void sendPostRequest(final CoffeeEvent[] proposals){
         final EditText eventEmailField = findViewById(R.id.inviteEmailField);
         final EditText eventTitleField = findViewById(R.id.eventTitleField);
+        final EditText eventLocationField = findViewById(R.id.eventLocationField);
+        final EditText inviteeNameField = findViewById(R.id.inviteeName);
         final Button sendInviteButton = findViewById(R.id.sendInviteButton);
         RequestQueue queue = Volley.newRequestQueue(NewEvent.this);
-//        String url = "https://grabbin-coffee-api.now.sh/api/invite"; // TODO: ENSURE THIS IS STILL ACCURATE
-        String url = "http://73ac6de2.ngrok.io/api/invite";
+        String url = "https://grabbin-coffee-api.now.sh/api/invite"; // TODO: ENSURE THIS IS STILL ACCURATE
+//        String url = "https://6377acb2.ngrok.io/api/invite";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -266,7 +268,7 @@ public class NewEvent extends AppCompatActivity {
 
                 String rsvpEmail = eventEmailField.getText().toString();
                 // create basic mailTo link object that will be used throughout.
-                MailLinkCreator mailLinkCreator = new MailLinkCreator("RSVPer Name (collect this!)",
+                MailLinkCreator mailLinkCreator = new MailLinkCreator(inviteeNameField.getText().toString(),
                         "App Owner Human Name ((remember to collect this))", rsvpEmail,
                         "greg.garnhart12+ADDTHIS@gmail.com",proposals[0].getStartDateOnly(), proposals[0].getEndTimeOnly());
 
@@ -291,7 +293,8 @@ public class NewEvent extends AppCompatActivity {
                 params.put("decline_link",mailLinkCreator.getDeclineLink());
                 params.put("subject", "You are being invited to get coffee!");
                 params.put("event_title", eventTitleField.getText().toString());
-                params.put("name", "CollectRecipientName");
+                params.put("name", inviteeNameField.getText().toString());
+                params.put("location", eventLocationField.getText().toString());
                 return params;
             }
 

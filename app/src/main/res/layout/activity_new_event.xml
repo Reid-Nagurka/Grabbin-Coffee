@@ -45,13 +45,13 @@
         android:id="@+id/inviteEmailField"
         android:layout_width="247dp"
         android:layout_height="48dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/invitee_email"
         android:inputType="textPersonName|textEmailAddress"
         app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/eventTitleField" />
+        app:layout_constraintTop_toBottomOf="@+id/inviteeName" />
 
     <!-- Adding this day-of-the-week picker. we'll see how it works-->
 
@@ -144,5 +144,18 @@
         android:text="@string/sun"
         app:layout_constraintStart_toEndOf="@+id/saturdayCheckBox"
         app:layout_constraintTop_toTopOf="@+id/saturdayCheckBox" />
+
+    <EditText
+        android:id="@+id/inviteeName"
+        android:layout_width="247dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="@string/invitee_name"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventTitleField" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
