@@ -61,7 +61,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class NewEvent extends AppCompatActivity {
 
-    //private boolean loc_found_check;
+    private final int LOC_FINE_PERMISSION_REQUEST_CODE = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,9 +162,9 @@ public class NewEvent extends AppCompatActivity {
 //            } else {
 
                 //check email is valid
-//                String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-//                boolean check = eventEmailText.matches(regex);
-//                if (check)
+                String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+                boolean check = eventEmailText.matches(regex);
+                if (check)
                     configureSendInviteButton();
 //            }
         }
@@ -226,6 +226,12 @@ public class NewEvent extends AppCompatActivity {
                     // TODO: add a handler for no proposed events found!
                     if(proposedEvents.length > 0){
                         sendPostRequest(proposedEvents);
+                    }
+
+                    else {
+                        Snackbar snackbar = Snackbar
+                            .make(findViewById(android.R.id.content).getRootView(), "Please select at one day.", Snackbar.LENGTH_LONG);
+                    snackbar.show();
                     }
                 }
 
@@ -354,7 +360,7 @@ public class NewEvent extends AppCompatActivity {
             //100 is a temporary request code, should be a CONST
             ActivityCompat.requestPermissions(NewEvent.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    200);
+                    LOC_FINE_PERMISSION_REQUEST_CODE);
         }
         //permission is granted
         else {
@@ -406,8 +412,6 @@ public class NewEvent extends AppCompatActivity {
        //   }
         }
 
-
-
     }
 
     @Override
@@ -415,7 +419,7 @@ public class NewEvent extends AppCompatActivity {
                                            String[] permissions, int[] grantResults) {
         //more cases for more permissions, for right now 100 is just a placeholder, should be switched to CONST
         switch (requestCode) {
-            case 200: {
+            case LOC_FINE_PERMISSION_REQUEST_CODE: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

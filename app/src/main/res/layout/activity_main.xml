@@ -42,18 +42,6 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/seeHistoryButton"
-        android:layout_width="268dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="20dp"
-        android:background="@android:color/white"
-        android:text="@string/see_past_rsvps"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.559"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newEventButton" />
-
-    <Button
         android:id="@+id/settingsButton"
         android:layout_width="268dp"
         android:layout_height="45dp"
@@ -63,6 +51,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.559"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seeHistoryButton" />
+        app:layout_constraintTop_toBottomOf="@+id/newEventButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.content.Intent;
 public class MainActivity extends AppCompatActivity {
 
+    private final int CAL_PERMISSION_REQUEST_CODE = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
         // there might be better ways to do this, but i'm going to create methods for each button
         configureNewEventButton();
-        configureSeeHistoryButton();
         configureSettingsButton();
     }
 
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                            //100 is a temporary request code, should be a CONST
                             ActivityCompat.requestPermissions(MainActivity.this,
                                 new String[]{Manifest.permission.READ_CALENDAR},
-                                100);
+                                    CAL_PERMISSION_REQUEST_CODE);
                 }
                 //permission is granted
                 else {
@@ -54,15 +55,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void configureSeeHistoryButton(){
-        Button seeHistoryButton = findViewById(R.id.seeHistoryButton);
-        seeHistoryButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                 startActivity(new Intent(MainActivity.this, HistoryActivity.class));
-            }
-        });
-    }
 
     private void configureSettingsButton(){
         Button settingsButton = findViewById(R.id.settingsButton);
@@ -79,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                                            String[] permissions, int[] grantResults) {
         //more cases for more permissions, for right now 100 is just a placeholder, should be switched to CONST
         switch (requestCode) {
-            case 100: {
+            case CAL_PERMISSION_REQUEST_CODE: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
