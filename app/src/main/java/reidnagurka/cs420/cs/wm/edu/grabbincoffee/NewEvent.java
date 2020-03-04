@@ -39,6 +39,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 //import com.google.android.material.snackbar.Snackbar;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -311,6 +314,7 @@ public class NewEvent extends AppCompatActivity {
 
     /* Open up webview to Google Maps, let user pick a location, copy location and paste into text field*/
     public void locationHandler(View view) {
+
         //need to check for location permission
         //startActivity(new Intent(NewEvent.this, MapsActivity.class));
 

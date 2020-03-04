@@ -150,7 +150,7 @@ public class SettingsActivity extends AppCompatActivity {
                             byte[] read_bytes = new byte[fis.available()];
                             fis.read(read_bytes);
                             //converts back byte array to string
-                            String email_as_string = new String(bytes);
+                            String email_as_string = new String(read_bytes);
                             System.out.println("Reading back final: " + email_as_string);
                         }
                     }
