@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -132,6 +133,16 @@ public class NewEvent extends AppCompatActivity {
 
 
         configureSendInviteButton();
+    }
+
+    private void putContentValues(){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CalendarContract.Calendars.ACCOUNT_NAME, "masclass2020@gmail.com");
+        contentValues.put(CalendarContract.Calendars.ACCOUNT_TYPE, "com.google");
+        contentValues.put(CalendarContract.Calendars.NAME, "masclass2020@gmail.com");
+        contentValues.put(CalendarContract.Calendars.OWNER_ACCOUNT, "masclass2020@gmail.com");
+        contentValues.put(CalendarContract.Calendars._ID,"masclass2020@gmail.com");
+
     }
 
     /* Run everytime data is submitted*/
@@ -498,13 +509,14 @@ public class NewEvent extends AppCompatActivity {
         }
         else{
             // we have permission to read the calendar.
-            Log.v("Permission granted", "good news! We can read the calendar");
+//            Log.v("Permission granted", "good news! We can read the calendar");
         }
 
 
         // Run query
         Cursor cur = null;
         ContentResolver cr = getContentResolver();
+        putContentValues();
         Uri uri = CalendarContract.Events.CONTENT_URI;
 
 //        String selection = "((" + CalendarContract.Calendars.ACCOUNT_NAME + ") AND ("
@@ -613,16 +625,6 @@ public class NewEvent extends AppCompatActivity {
                     weeklyEvents.put(event_start, event_end);
                 }
             }
-
-
-
-            // NOTE: this was copy and pasted. i don't think we need them (AND it was causing errors!)
-//            calID = cur.getLong(PROJECTION_ID_INDEX);
-//            displayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
-//            accountName = cur.getString(PROJECTION_ACCOUNT_NAME_INDEX);
-//            ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
-
-            // Do something with the values...
         }
 
         return weeklyEvents;
