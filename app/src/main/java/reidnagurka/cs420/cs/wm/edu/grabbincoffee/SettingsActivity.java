@@ -48,17 +48,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class SettingsActivity extends AppCompatActivity {
 
-    // ANDROID STUDIO STUFF
-    // Projection array. Creating indices for this array instead of doing
-    // dynamic lookups improves performance.
-    public static final String[] EVENT_PROJECTION = new String[] {
-            CalendarContract.Calendars._ID,                           // 0
-            CalendarContract.Calendars.ACCOUNT_NAME,                  // 1
-            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,         // 2
-            CalendarContract.Calendars.OWNER_ACCOUNT                  // 3
-
-    };
-
     // The indices for the projection array above.
     private static final int PROJECTION_ID_INDEX = 0;
     private static final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
@@ -70,44 +59,8 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        Log.v("Calendar Contract", EVENT_PROJECTION[0]);
-        putContentValues();
-
-
-
-        configurePostUpButtion();
 
         emailAddressHandler();
-    }
-
-    private void putContentValues(){
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(CalendarContract.Calendars.ACCOUNT_NAME, "greg.garnhart12@gmail.com");
-        contentValues.put(CalendarContract.Calendars.ACCOUNT_TYPE, "com.google");
-        contentValues.put(CalendarContract.Calendars.NAME, "greg.garnhart12@gmail.com");
-        contentValues.put(CalendarContract.Calendars.OWNER_ACCOUNT, "greg.garnhart12@gmail.com");
-
-        // event instance things (basically from week to week)
-        Date today = new Date();
-        contentValues.put(CalendarContract.Instances.DTSTART, today.getTime());
-        contentValues.put(CalendarContract.Instances.DTEND, (today.getTime() + 604800000L));
-    }
-
-    private void configurePostUpButtion(){
-        Button postUpButton = findViewById(R.id.postUp);
-
-
-
-
-        postUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // A HashMap of our selected weekdays.
-                // Important to note that the capitilization is important!
-                // It is compared to a string returned from a calendar function
-
-            }
-        });
     }
 
     private void emailAddressHandler() {

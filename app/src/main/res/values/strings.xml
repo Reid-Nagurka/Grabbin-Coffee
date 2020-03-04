@@ -28,4 +28,5 @@
     <string name="sun">Sun</string>
     <string name="invitee_name">invitee name</string>
     <string name="user_email">User Email</string>
+    <string name="your_email">your email</string>
 </resources>

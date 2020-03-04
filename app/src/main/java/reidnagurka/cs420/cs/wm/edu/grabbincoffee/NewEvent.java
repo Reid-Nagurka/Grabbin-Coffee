@@ -283,8 +283,7 @@ public class NewEvent extends AppCompatActivity {
                         byte[] read_bytes = new byte[fis.available()];
                         fis.read(read_bytes);
                         //converts back byte array to string
-                        String tmp_string = new String(read_bytes);
-                        email_as_string = tmp_string;
+                        email_as_string = new String(read_bytes);
                         System.out.println("\n Reading file in New Event: " + email_as_string);
                     }
                 }
@@ -306,7 +305,7 @@ public class NewEvent extends AppCompatActivity {
                 // create basic mailTo link object that will be used throughout.
                 MailLinkCreator mailLinkCreator = new MailLinkCreator(inviteeNameField.getText().toString(),
                         "App Owner Human Name ((remember to collect this))", rsvpEmail,
-                        "greg.garnhart12+ADDTHIS@gmail.com",proposals[0].getStartDateOnly(), proposals[0].getEndTimeOnly());
+                        email_as_string,proposals[0].getStartDateOnly(), proposals[0].getEndTimeOnly());
 
                 // add proposals to params object!
                 for(int i = 0; i < size; i++){
@@ -325,7 +324,7 @@ public class NewEvent extends AppCompatActivity {
                     params.put(urlKey, url);
                 }
                 params.put("sender_email", "gegarnhart@email.wm.edu");
-                params.put("sender_name", "Greg");
+                params.put("sender_name", "Greg"); // TODO: change this, i guess
                 params.put("decline_link",mailLinkCreator.getDeclineLink());
                 params.put("subject", "You are being invited to get coffee!");
                 params.put("event_title", eventTitleField.getText().toString());
