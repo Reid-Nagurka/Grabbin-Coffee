@@ -223,7 +223,7 @@ public class NewEvent extends AppCompatActivity {
                     selectedWeekdays.put("Sunday", sunday.isChecked());
                     CoffeeEvent[] proposedEvents = runCalendarQuery(selectedWeekdays);
 
-                    // TODO: add a handler for no proposed events found!
+
                     if(proposedEvents.length > 0){
                         sendPostRequest(proposedEvents);
                     }
@@ -251,7 +251,7 @@ public class NewEvent extends AppCompatActivity {
         final EditText inviteeNameField = findViewById(R.id.inviteeName);
         final Button sendInviteButton = findViewById(R.id.sendInviteButton);
         RequestQueue queue = Volley.newRequestQueue(NewEvent.this);
-        String url = "https://grabbin-coffee-api.now.sh/api/invite"; // TODO: ENSURE THIS IS STILL ACCURATE
+        String url = "https://grabbin-coffee-api.now.sh/api/invite";
 //        String url = "https://6377acb2.ngrok.io/api/invite";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -270,7 +270,7 @@ public class NewEvent extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams(){
                 Map<String, String> params = new HashMap<>();
-                params.put("email", eventEmailField.getText().toString()); //TODO: add sender email!!
+                params.put("email", eventEmailField.getText().toString());
 
                 //sender email:
                 String filename = "coffee_app_storage.txt";
@@ -304,7 +304,7 @@ public class NewEvent extends AppCompatActivity {
                 String rsvpEmail = eventEmailField.getText().toString();
                 // create basic mailTo link object that will be used throughout.
                 MailLinkCreator mailLinkCreator = new MailLinkCreator(inviteeNameField.getText().toString(),
-                        "App Owner Human Name ((remember to collect this))", rsvpEmail,
+                        "Friend", rsvpEmail,
                         email_as_string,proposals[0].getStartDateOnly(), proposals[0].getEndTimeOnly());
 
                 // add proposals to params object!
@@ -323,8 +323,8 @@ public class NewEvent extends AppCompatActivity {
                     params.put(timeKey, timeString);
                     params.put(urlKey, url);
                 }
-                params.put("sender_email", "gegarnhart@email.wm.edu");
-                params.put("sender_name", "Greg"); // TODO: change this, i guess
+                params.put("sender_email", email_as_string);
+                params.put("sender_name", "Friend");
                 params.put("decline_link",mailLinkCreator.getDeclineLink());
                 params.put("subject", "You are being invited to get coffee!");
                 params.put("event_title", eventTitleField.getText().toString());
