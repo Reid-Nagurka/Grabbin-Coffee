@@ -142,24 +142,24 @@ public class SettingsActivity extends AppCompatActivity {
                     }
 
                     //reading back, will go elsewhere but proof of working code here
-                    try {
-                        FileInputStream fis = openFileInput(filename);
-                        //checks to make sure there is data to be read
-                        if (fis.available() > 0) {
-                            //reads in bytes from file to a byte array
-                            byte[] read_bytes = new byte[fis.available()];
-                            fis.read(read_bytes);
-                            //converts back byte array to string
-                            String email_as_string = new String(read_bytes);
-                            System.out.println("Reading back final: " + email_as_string);
-                        }
-                    }
-                    catch (FileNotFoundException e) {
-                        System.out.println("File not found fis");
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        FileInputStream fis = openFileInput(filename);
+//                        //checks to make sure there is data to be read
+//                        if (fis.available() > 0) {
+//                            //reads in bytes from file to a byte array
+//                            byte[] read_bytes = new byte[fis.available()];
+//                            fis.read(read_bytes);
+//                            //converts back byte array to string
+//                            String email_as_string = new String(read_bytes);
+//                            System.out.println("Reading back final: " + email_as_string);
+//                        }
+//                    }
+//                    catch (FileNotFoundException e) {
+//                        System.out.println("File not found fis");
+//                        e.printStackTrace();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
 
                     return true;
                 }

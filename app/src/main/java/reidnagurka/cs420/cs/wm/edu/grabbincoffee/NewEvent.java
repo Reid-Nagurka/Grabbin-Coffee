@@ -37,6 +37,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 //import com.google.android.material.snackbar.Snackbar;
 
 import java.io.FileInputStream;
@@ -264,6 +265,32 @@ public class NewEvent extends AppCompatActivity {
             protected Map<String, String> getParams(){
                 Map<String, String> params = new HashMap<>();
                 params.put("email", eventEmailField.getText().toString()); //TODO: add sender email!!
+
+                //sender email:
+                String filename = "coffee_app_storage.txt";
+                String email_as_string = "";
+                try {
+                    FileInputStream fis = openFileInput(filename);
+                    //checks to make sure there is data to be read
+                    if (fis.available() > 0) {
+                        //reads in bytes from file to a byte array
+                        byte[] read_bytes = new byte[fis.available()];
+                        fis.read(read_bytes);
+                        //converts back byte array to string
+                        String tmp_string = new String(read_bytes);
+                        email_as_string = tmp_string;
+                        System.out.println("\n Reading file in New Event: " + email_as_string);
+                    }
+                }
+                catch (FileNotFoundException e) {
+                    System.out.println("File not found fis");
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(android.R.id.content).getRootView(), "Please enter YOUR email address in settings!", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 // how many proposals are we sending?
                 int size = proposals.length;
